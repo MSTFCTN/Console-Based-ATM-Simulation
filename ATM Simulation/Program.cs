@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Linq;
 using System.ComponentModel;
-using System.Text.Json;
 using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Principal;
+using System.Text;
+using System.Text.Json;
 
 namespace GeminiCS {
     class App {
@@ -28,7 +29,7 @@ namespace GeminiCS {
                 Accounts.Add(Account);
                 JSON_Operations.write_to_JSON();
                 
-                Console.WriteLine("\rPress ESC to exit and see previous created accounts!");
+                Console.WriteLine("\r\r\r\r\r\r\rPress ESC to exit");
                 
                 keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Escape) döngü = false;
@@ -43,26 +44,18 @@ namespace GeminiCS {
 
         public static List<Account> Accounts = new List<Account>();
 
-
-
-
-
-        // burda hata var
-
-
-
-        public static void Show_Accounts() {
-           // Account account = new Account();
-            if (account.Username == "0") {
-                foreach (Account show_accounts in Accounts) {
+        public static void Show_Accounts() {             
+            foreach (Account show_accounts in Accounts) {
+                if (show_accounts.Username != "0" || show_accounts.Password != "0") {
+                    Console.WriteLine("\r\r");
                     Console.WriteLine(")=================(");
                     Console.WriteLine($"Username = {show_accounts.Username}");
                     Console.WriteLine($"Password = {show_accounts.Password}");
                     Console.WriteLine($"Balance = {show_accounts.Balance} $");
+                    Console.WriteLine(")=================(");
+                    Console.WriteLine("\r\r");
                 }
-                //Console.WriteLine(")=================(");
             }
-            
         }
 
 
