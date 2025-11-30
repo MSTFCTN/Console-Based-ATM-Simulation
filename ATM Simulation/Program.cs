@@ -7,13 +7,15 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 
+//aynı username control lazım 
+//boş username ve passport control lazım
+
 namespace GeminiCS {
     class App {
         public static void Main() {
             JSON_Operations.read_from_JSON();
             Console.WriteLine("Dosya Yolu: " + Path.GetFullPath("Accounts.json"));
             Console.WriteLine();
-            Show_Accounts();
 
             bool döngü = true;
             ConsoleKeyInfo keyInfo;
@@ -28,8 +30,9 @@ namespace GeminiCS {
                 
                 Accounts.Add(Account);
                 JSON_Operations.write_to_JSON();
-                
-                Console.WriteLine("\r\r\r\r\r\r\rPress ESC to exit");
+
+                Console.WriteLine();
+                Console.WriteLine("Press ESC to exit");
                 
                 keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Escape) döngü = false;
@@ -59,14 +62,40 @@ namespace GeminiCS {
         }
 
 
-
-
-
-
-
         public static string Set_Username() {
             Console.Write("Username: ");
-            string username = Console.ReadLine();
+
+            List<char> _USERNAME_ = new List<char>();
+
+            int lastIndexNumber;
+            bool username_input = true;
+            ConsoleKeyInfo keyInfo;
+            while (username_input) {
+
+                keyInfo = Console.ReadKey(true);
+
+                if (keyInfo.Key == ConsoleKey.Enter) {
+                    if (_USERNAME_.Count > 0) {
+                        username_input = false;
+                        Console.WriteLine();
+                    }
+                }
+                else if (keyInfo.Key == ConsoleKey.Backspace) {
+                    if (_USERNAME_.Count > 0) {
+                        lastIndexNumber = _USERNAME_.Count - 1;
+                        _USERNAME_.RemoveAt(lastIndexNumber);
+                        Console.Write("\b \b");
+                    }
+                }
+                else if (!char.IsControl(keyInfo.KeyChar)) {
+                    _USERNAME_.Add(keyInfo.KeyChar);
+                    Console.Write(keyInfo.KeyChar);
+                }
+                
+            }
+
+            string username = new string(_USERNAME_.ToArray());
+
             return username;
         }
 
@@ -77,7 +106,6 @@ namespace GeminiCS {
             List<char> _PASSWORD_ = new List<char>();
 
             int lastIndexNumber;
-            char pass_letters;
             bool password_input = true;
             ConsoleKeyInfo keyInfo;
             while (password_input) {
@@ -85,8 +113,10 @@ namespace GeminiCS {
                 keyInfo = Console.ReadKey(true);
 
                 if (keyInfo.Key == ConsoleKey.Enter) {
-                    password_input = false;
-                    Console.WriteLine();
+                    if(_PASSWORD_.Count > 0) {
+                        password_input = false;
+                        Console.WriteLine();
+                    }                    
                 }
                 else if (keyInfo.Key == ConsoleKey.Backspace) {
                     if (_PASSWORD_.Count > 0) {
@@ -95,10 +125,10 @@ namespace GeminiCS {
                         Console.Write("\b \b");
                     }
                 }
-                else if (char.TryParse(char.ToString(keyInfo.KeyChar), out pass_letters)) {
-                    _PASSWORD_.Add(pass_letters);
+                else if(!char.IsControl(keyInfo.KeyChar)) {
+                    _PASSWORD_.Add(keyInfo.KeyChar);
                     Console.Write("*");
-                }
+                }                
             }
 
             string password = new string(_PASSWORD_.ToArray());//password = string.Join(",", _PASSWORD_);
