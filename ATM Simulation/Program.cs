@@ -6,16 +6,14 @@ using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
-//aynı username control lazım 
-//boş username ve passport control lazım
 
 namespace GeminiCS {
     class App {
         public static void Main() {
             JSON_Operations.read_from_JSON();
-            Console.WriteLine("Dosya Yolu: " + Path.GetFullPath("Accounts.json"));
-            Console.WriteLine();
+            //Console.WriteLine("File Path: " + Path.GetFullPath("Accounts.json"));
 
             bool döngü = true;
             ConsoleKeyInfo keyInfo;
@@ -23,25 +21,19 @@ namespace GeminiCS {
                 Account Account = new Account(App.Set_Username(), App.Set_Password());
 
                 Console.Clear();
-                
-                Console.WriteLine($"Username = {Account.Username}");
-                Console.WriteLine($"Password = {Account.Password}");
                 Console.WriteLine($"Balance = {Account.Balance} $");
-                
+
                 Accounts.Add(Account);
                 JSON_Operations.write_to_JSON();
 
                 Console.WriteLine();
-                Console.WriteLine("Press ESC to exit");
+                Console.WriteLine("Press ESC to exit or press any key to continue");
                 
                 keyInfo = Console.ReadKey(true);
                 if (keyInfo.Key == ConsoleKey.Escape) döngü = false;
                 
                 Console.Clear();
             }
-
-
-
             Console.ReadKey();
         }
 
@@ -63,38 +55,56 @@ namespace GeminiCS {
 
 
         public static string Set_Username() {
-            Console.Write("Username: ");
 
-            List<char> _USERNAME_ = new List<char>();
+            bool valid_username = true;
+            string username = null;
+            while (valid_username) {
+                Console.Write("Username: ");
 
-            int lastIndexNumber;
-            bool username_input = true;
-            ConsoleKeyInfo keyInfo;
-            while (username_input) {
+                List<char> _USERNAME_ = new List<char>();
 
-                keyInfo = Console.ReadKey(true);
+                int lastIndexNumber;
+                bool username_input = true;
+                ConsoleKeyInfo keyInfo;
+                while (username_input) {
 
-                if (keyInfo.Key == ConsoleKey.Enter) {
-                    if (_USERNAME_.Count > 0) {
-                        username_input = false;
+                    keyInfo = Console.ReadKey(true);
+
+                    if (keyInfo.Key == ConsoleKey.Enter) {
+                        if (_USERNAME_.Count > 0) {
+                            username_input = false;
+                            Console.WriteLine();
+                        }
+                    }
+                    else if (keyInfo.Key == ConsoleKey.Backspace) {
+                        if (_USERNAME_.Count > 0) {
+                            lastIndexNumber = _USERNAME_.Count - 1;
+                            _USERNAME_.RemoveAt(lastIndexNumber);
+                            Console.Write("\b \b");
+                        }
+                    }
+                    else if (!char.IsControl(keyInfo.KeyChar)) {
+                        _USERNAME_.Add(keyInfo.KeyChar);
+                        Console.Write(keyInfo.KeyChar);
+                    }
+
+                }
+
+                username = new string(_USERNAME_.ToArray());
+                foreach (Account acc in Accounts) {
+                    if (acc.Username == username) {
+                        Console.WriteLine(" ERROR! This Username Already Exist!");
                         Console.WriteLine();
+                        Thread.Sleep(1000);
+                        Console.Clear();
+                        valid_username = true;
+                        break;
+                    }
+                    else {
+                        valid_username = false;
                     }
                 }
-                else if (keyInfo.Key == ConsoleKey.Backspace) {
-                    if (_USERNAME_.Count > 0) {
-                        lastIndexNumber = _USERNAME_.Count - 1;
-                        _USERNAME_.RemoveAt(lastIndexNumber);
-                        Console.Write("\b \b");
-                    }
-                }
-                else if (!char.IsControl(keyInfo.KeyChar)) {
-                    _USERNAME_.Add(keyInfo.KeyChar);
-                    Console.Write(keyInfo.KeyChar);
-                }
-                
             }
-
-            string username = new string(_USERNAME_.ToArray());
 
             return username;
         }
