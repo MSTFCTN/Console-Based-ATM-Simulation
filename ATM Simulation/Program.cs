@@ -13,7 +13,6 @@ namespace GeminiCS {
     class App {
         public static void Main() {
             JSON_Operations.read_from_JSON();
-            //Console.WriteLine("File Path: " + Path.GetFullPath("Accounts.json"));
 
             bool döngü = true;
             ConsoleKeyInfo keyInfo;
