@@ -16,6 +16,8 @@ namespace GeminiCS {
 
             bool döngü = true;
             ConsoleKeyInfo keyInfo;
+
+            Show_Accounts();
             while (döngü) {
                 Account Account = new Account(App.Set_Username(), App.Set_Password());
 
@@ -54,57 +56,32 @@ namespace GeminiCS {
 
 
         public static string Set_Username() {
-
-            bool valid_username = true;
             string username = null;
-            while (valid_username) {
+            bool IsUsernameValid = false;
+
+            while (!IsUsernameValid) {
                 Console.Write("Username: ");
 
-                List<char> _USERNAME_ = new List<char>();
-
-                int lastIndexNumber;
-                bool username_input = true;
-                ConsoleKeyInfo keyInfo;
-                while (username_input) {
-
-                    keyInfo = Console.ReadKey(true);
-
-                    if (keyInfo.Key == ConsoleKey.Enter) {
-                        if (_USERNAME_.Count > 0) {
-                            username_input = false;
-                            Console.WriteLine();
-                        }
-                    }
-                    else if (keyInfo.Key == ConsoleKey.Backspace) {
-                        if (_USERNAME_.Count > 0) {
-                            lastIndexNumber = _USERNAME_.Count - 1;
-                            _USERNAME_.RemoveAt(lastIndexNumber);
-                            Console.Write("\b \b");
-                        }
-                    }
-                    else if (!char.IsControl(keyInfo.KeyChar)) {
-                        _USERNAME_.Add(keyInfo.KeyChar);
-                        Console.Write(keyInfo.KeyChar);
-                    }
-
+                while (string.IsNullOrEmpty(username = Console.ReadLine())) {
+                    Console.WriteLine("PLease Enter a Valid Username!");
+                    Console.Write("Username: ");
                 }
 
-                username = new string(_USERNAME_.ToArray());
+                if (Accounts.Count == 0) break;
+
                 foreach (Account acc in Accounts) {
-                    if (acc.Username == username) {
+                    if (acc == null || Accounts is null) IsUsernameValid = true;
+                    else if (acc.Username == username) {
                         Console.WriteLine(" ERROR! This Username Already Exist!");
                         Console.WriteLine();
                         Thread.Sleep(1000);
                         Console.Clear();
-                        valid_username = true;
+                        IsUsernameValid = false;
                         break;
                     }
-                    else {
-                        valid_username = false;
-                    }
+                    else IsUsernameValid = true;                    
                 }
             }
-
             return username;
         }
 
