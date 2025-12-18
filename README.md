@@ -13,7 +13,7 @@ A functional ATM simulation developed in C# that practices Object-Oriented Progr
 * **Framework:** .NET
 * **Data Format:** JSON (System.Text.Json)
 
-## 🛠️ How to Run
+##  How to Run
 1. Clone the repository.
 2. Open the solution in Visual Studio or VS Code.
 3. Run the project (`dotnet run`).
