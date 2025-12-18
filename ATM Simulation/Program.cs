@@ -17,21 +17,17 @@ namespace GeminiCS {
         public static Account Account;
 
         public static void Main() {
-            Console.CursorVisible = false;
-            
-            JSON_Operations.read_from_JSON();
-            //Account Account = new Account(App.Set_Username(), App.Set_Password());
-            //Accounts.Add(Account);
-            //JSON_Operations.write_to_JSON();
+            Console.CursorVisible = false;                      
 
             ConsoleKeyInfo keyInfo;
 
             bool program = true;
             while (program) {
+                JSON_Operations.read_from_JSON();
                 int main_select;
                 main_select = Menu.MainMenu();
 
-                if(main_select == 0) {
+                if (main_select == 0) {
                     int login_select;
                     bool login;
                     while (!(login = Login())) {
@@ -90,7 +86,7 @@ namespace GeminiCS {
 
                             string input = Console.ReadLine();
                             int amount;
-                            while(!int.TryParse(input ,out amount) || amount > Account.Balance || amount < 0){
+                            while (!int.TryParse(input, out amount) || amount > Account.Balance || amount < 0) {
                                 Console.Clear();
                                 Console.WriteLine("Please enter a valid amount!");
                                 Console.Write(": ");
@@ -114,7 +110,7 @@ namespace GeminiCS {
                             Console.WriteLine("Press ENTER when you done");
                             keyInfo = Console.ReadKey();
 
-                            while(keyInfo.Key != ConsoleKey.Enter) {
+                            while (keyInfo.Key != ConsoleKey.Enter) {
                                 keyInfo = Console.ReadKey();
                             }
 
@@ -129,6 +125,13 @@ namespace GeminiCS {
                         if (login_select == 2) break;
                     }
                 }
+
+                else if (main_select == 1) {
+                    bool signup = SignUp();
+                    while (!signup) ;
+                }
+
+                else if (main_select == 2) break;
             }
         }
 
@@ -158,6 +161,33 @@ namespace GeminiCS {
             return false;
         }
 
+        public static bool SignUp() {
+            ConsoleKeyInfo keyInfo;
+            Console.Clear();
+            Account Account = new Account(App.Set_Username(), App.Set_Password());
+            Console.WriteLine("Press ESC if you want to back main menu or press any key continue");
+            keyInfo = Console.ReadKey();
+            if (keyInfo.Key == ConsoleKey.Escape) return true;
+            else {
+                Console.Clear();
+                Console.WriteLine("Your account is preparing");
+                Thread.Sleep(1000);
+                Console.Write(".");
+                Thread.Sleep(1000);
+                Console.Write(".");
+                Thread.Sleep(1000);
+                Console.Write(".");
+                Thread.Sleep(1000);
+                Accounts.Add(Account);
+                JSON_Operations.write_to_JSON();
+                Console.Clear();
+                Console.WriteLine("Your account has been created succesfuly. Press any key to back main menu...");
+                keyInfo = Console.ReadKey();
+                if (keyInfo != null) return true;
+                else return false;
+            }
+        }
+
 
         public static string Set_Username() {
             string username = null;
@@ -167,7 +197,9 @@ namespace GeminiCS {
                 Console.Write("Username: ");
 
                 while (string.IsNullOrEmpty(username = Console.ReadLine())) {
+                    Console.Clear();
                     Console.WriteLine("PLease Enter a Valid Username!");
+                    Console.WriteLine();
                     Console.Write("Username: ");
                 }
 
