@@ -16,4 +16,4 @@ A functional ATM simulation developed in C# that practices Object-Oriented Progr
 ##  How to Run
 1. Clone the repository.
 2. Open the solution in Visual Studio or VS Code.
-3. Run the project (`dotnet run`).
+3. Run the project.
